@@ -1,0 +1,52 @@
+<html>
+
+<body>
+    <h1>API call testing</h1>
+    <div id="result"></div>
+    <script>
+        var i = 0;
+
+        function apiCall() {
+            if (window.XMLHttpRequest) { // Mozilla, Safari, IE7+ ...
+                httpRequest = new XMLHttpRequest();
+            } else if (window.ActiveXObject) { // IE 6 and older
+                httpRequest = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            var url = 'https://reqres.in/api/users?per_page=1&page='+i;
+    
+            httpRequest.onreadystatechange = function () {
+                if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                    if (httpRequest.status === 200) {
+                        var p = document.createElement('p');
+                        p.innerText = url;
+                        document.getElementById('result').appendChild(p);
+
+                        var p = document.createElement('p');
+                        p.innerText = httpRequest.responseText;
+                        document.getElementById('result').appendChild(p);
+                    } else {
+                        var p = document.createElement('p');
+                        p.innerText = 'There was a problem with the request.';
+                        document.getElementById('result').appendChild(p);
+                    }
+                }
+            };
+
+            httpRequest.open('GET', url, true);
+            httpRequest.send();
+
+            i = (i + 1) % 12;
+
+            setTimeout(() => {
+                apiCall();
+            }, 5000);
+        }
+
+        setTimeout(() => {
+            apiCall();
+        }, 1000)
+    </script>
+</body>
+
+</html>
